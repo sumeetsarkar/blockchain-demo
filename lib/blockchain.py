@@ -3,8 +3,8 @@ BlockChain
 """
 
 import json
-from block import Block
-from transaction import Transaction
+from .block import Block
+from .ledgerentry import LedgerEntry
 
 class BlockChain:
 
@@ -23,7 +23,7 @@ class BlockChain:
     # create and return genesis block only if chain is empty
     if len(self.__chain) is 0:
       genesisblock = Block([], self.__previousHashForGenesis)
-      genesisblock.mine(self.__difficulty)
+      genesisblock.mine(0)
       return genesisblock
     else:
       raise Exception('Genesis block can only be created when chain is empty')
@@ -42,7 +42,7 @@ class BlockChain:
     # check for block chain validity
     compromisedBlock = self.is_valid()
     if compromisedBlock is not None:
-      raise Exception(self.__name + ' block chain is compromised!', compromisedBlock)
+      raise Exception(self.__name + ' block chain is compromised!', compromisedBlock.summary)
     # get last block in chain
     lastBlockInChain = self.__get_last_block()
     # create new block with concatenated list of pending transaction + current transactions
@@ -52,9 +52,7 @@ class BlockChain:
     # append newly mined block to the block chain
     self.__chain.append(newBlock)
     # add miner reward transaction in the pending transaction
-    self.__pendingTransaction = [
-      Transaction(self.__name, minerName, self.__minerReward)
-    ]
+    self.__pendingTransaction = LedgerEntry(self.__name, minerName, self.__minerReward).transactions
 
 
   def is_valid(self):

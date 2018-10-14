@@ -1,21 +1,25 @@
 from lib import BlockChain
-from lib import Transaction
+from lib import LedgerEntry
 
+# create block chain instance with difficulty 1 and reward 10 units
 blockChain = BlockChain('sumeet-blockchain', 1, 10)
 
-listOfTransactions = [
-  Transaction('userA', 'userB', 400),
-  Transaction('userC', 'userD', 100),
-  Transaction('userA', 'userC', 200),
-]
+# create list of transactions from ledger entry
+listOfTransactions = []
+listOfTransactions += LedgerEntry('userA', 'userB', 400).transactions
+listOfTransactions += LedgerEntry('userA', 'userC', 200).transactions
+# add list of transactions to the block chain
 blockChain.add_block(listOfTransactions, 'sumeetsarkar')
 
-listOfTransactions = [
-  Transaction('userA', 'userB', 900),
-  Transaction('userC', 'userD', 500),
-]
+# create list of transactions from ledger entry
+listOfTransactions = []
+listOfTransactions += LedgerEntry('userA', 'userB', 900).transactions
+listOfTransactions += LedgerEntry('userC', 'userD', 500).transactions
+# add list of transactions to the block chain
 blockChain.add_block(listOfTransactions, 'sumeetsarkar')
 
+# list the entire block chain
 blockChain.list_chain()
 
+# check the validity of the block chain
 print('Block chain validity', blockChain.is_valid() is None)

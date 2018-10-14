@@ -2,6 +2,8 @@
 Block
 """
 
+import json
+import datetime
 import hashlib
 
 class Block:
@@ -9,6 +11,11 @@ class Block:
     self.__listOfTransaction = listOfTransaction
     self.__previousHash = previousHash
     self.__hash = -1
+    self.__date = datetime.datetime.now()
+    # below fields are to precompute static data for quicker __compute_hash iterations
+    self.__listOfTransactionInJsonArray = self.__get_json_array_of_transactions()
+    self.__strData = str(self.__previousHash) + str(self.__date.strftime('%c')) + self.__listOfTransactionInJsonArray
+    # nounce is the only variable incrementer in hash
     self.__nounce = 0
   
   @property
@@ -30,10 +37,19 @@ class Block:
                 previousHash=self.previousHash,
     )
 
+  #private method
+  def __get_json_array_of_transactions(self):
+    list = []
+    for t in self.__listOfTransaction:
+      list.append(t.summary)
+    return json.dumps(list)
+
   # private method
   def __compute_hash(self):
     h = hashlib.sha256()
-    h.update(str(self.__listOfTransaction) + str(self.__previousHash) + str(self.__nounce))
+    strdata = self.__strData + str(self.__nounce)
+    strdata = bytes(strdata, 'UTF8')
+    h.update(strdata)
     return h.hexdigest()
 
 
@@ -58,6 +74,6 @@ class Block:
       # update nounce each time to generate different hash, which may meet the difficulty criteria
       self.__nounce += 1
       h = self.__compute_hash()
+      # print(h, h[0:int(difficulty)], difficultyString)
     # set the computed hash
     self.__hash = h
-

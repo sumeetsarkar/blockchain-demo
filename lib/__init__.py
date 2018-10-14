@@ -1,2 +1,2 @@
-from blockchain import BlockChain
-from transaction import Transaction
+from .blockchain import BlockChain
+from .ledgerentry import LedgerEntry
