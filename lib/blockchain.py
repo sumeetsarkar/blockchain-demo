@@ -77,5 +77,17 @@ class BlockChain:
 
 
   def compute_statement_for_user(self, user):
-    # TODO
-    pass
+    totalDebit = 0
+    totalCredit = 0
+    print('\nLisiting ' + user + ' transactions...')
+    for block in self.__chain:
+      for tran in block.listOfTransaction:
+        if tran.fromUser == user and tran.amount > 0:
+          totalDebit -= tran.amount
+          print(tran.summary)
+        elif tran.toUser is user and tran.amount > 0:
+          totalCredit += tran.amount
+          print(tran.summary)
+    print('Credits  : ' + str(totalCredit))
+    print('Debits   : ' + str(totalDebit))
+    print('Balance  : ' + str(totalCredit + totalDebit))

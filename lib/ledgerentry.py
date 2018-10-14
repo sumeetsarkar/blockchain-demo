@@ -8,7 +8,7 @@ from .transaction import Transaction
 class LedgerEntry:
   def __init__(self, fromUser, toUser, amount):
     self.__creditTransaction = Transaction(fromUser, toUser, amount)
-    self.__debitTransaction = Transaction(fromUser, toUser, amount * -1)
+    self.__debitTransaction = Transaction(toUser, fromUser, amount * -1)
 
   @property
   def creditTransaction(self):
