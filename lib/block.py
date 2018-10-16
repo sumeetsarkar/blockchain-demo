@@ -63,10 +63,12 @@ class Block:
 
 
   def is_hash_matching(self):
-    return self.hash == self.__compute_hash()
+    difficultyString = self.__generate_diffculty_string(self.__difficulty)
+    return self.hash[0:int(self.__difficulty)] is difficultyString and self.hash == self.__compute_hash()
 
 
   def mine(self, difficulty):
+    self.__difficulty = difficulty
     h = self.__compute_hash()
     difficultyString = self.__generate_diffculty_string(difficulty)
     # mine until the difficulty criteria is met with generated hash
