@@ -49,7 +49,7 @@ class BlockChain:
   def add_block(self, listOfTransactions, minerName):
     # check for block chain validity
     isValid, compromisedBlock = self.is_valid()
-    if compromisedBlock is not None:
+    if isValid is False:
       raise Exception(self.__name + ' block chain is compromised!', isValid, compromisedBlock.summary)
     # get last block in chain
     lastBlockInChain = self.__get_last_block()
