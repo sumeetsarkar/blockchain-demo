@@ -29,7 +29,7 @@ print('---------------------')
 blockChain.list_chain()
 
 # check the validity of the block chain
-print('Block chain validity', blockChain.is_valid() is None)
+print('\n\nBlock chain validity', blockChain.is_valid() is None)
 
 blockChain.compute_statement_for_user('userA')
 blockChain.compute_statement_for_user('userC')

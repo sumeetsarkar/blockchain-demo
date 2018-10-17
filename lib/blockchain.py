@@ -12,7 +12,6 @@ class BlockChain:
     self.__name = name
     self.__previousHashForGenesis = -1
     self.__chain = []
-    self.__pendingTransaction = []
     self.__difficulty = difficulty
     self.__minerReward = reward
     self.__chain.append(self.__create_genesis_block())
@@ -45,14 +44,13 @@ class BlockChain:
       raise Exception(self.__name + ' block chain is compromised!', compromisedBlock.summary)
     # get last block in chain
     lastBlockInChain = self.__get_last_block()
-    # create new block with concatenated list of pending transaction + current transactions
-    newBlock = Block(self.__pendingTransaction + listOfTransactions, lastBlockInChain.hash, self.__difficulty)
+    # create new block with concatenated 1 reward transaction + list of transactions to add in block
+    listOfTransactions = LedgerEntry(self.__name, minerName, self.__minerReward).transactions + listOfTransactions
+    newBlock = Block(listOfTransactions, lastBlockInChain.hash, self.__difficulty)
     # Proof of Work Phase: mine new block with set diffculty
     newBlock.mine()
     # append newly mined block to the block chain
     self.__chain.append(newBlock)
-    # add miner reward transaction in the pending transaction
-    self.__pendingTransaction = LedgerEntry(self.__name, minerName, self.__minerReward).transactions
 
 
   def is_valid(self):
