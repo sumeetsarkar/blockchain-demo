@@ -2,7 +2,7 @@ from lib import BlockChain
 from lib import LedgerEntry
 
 # create block chain instance with difficulty 1 and reward 10 units
-blockChain = BlockChain('sumeet-blockchain', 6, 10)
+blockChain = BlockChain('sumeet-blockchain', 4, 10, None)
 
 # create list of transactions from ledger entry
 listOfTransactions = []
@@ -29,7 +29,7 @@ print('---------------------')
 blockChain.list_chain()
 
 # check the validity of the block chain
-print('\n\nBlock chain validity', blockChain.is_valid() is None)
+print('\n\nBlock chain validity', blockChain.is_valid())
 
 blockChain.compute_statement_for_user('userA')
 blockChain.compute_statement_for_user('userC')

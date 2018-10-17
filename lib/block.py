@@ -6,23 +6,15 @@ import json
 import time
 import datetime
 import hashlib
+from .transaction import Transaction
 
 class Block:
-  def __init__(self, listOfTransaction = [], previousHash = -1, difficulty = 0):
-    self.__version = '1'
-    self.__listOfTransaction = listOfTransaction
-    self.__previousHash = previousHash
-    self.__hash = -1
-    self.__timeInSeconds = int(time.mktime(datetime.datetime.today().timetuple()))
-    self.__difficulty = difficulty
-    # below fields are to precompute static data for quicker __compute_hash iterations
-    listOfTransactionInStringArray = self.__build_transactions_array_of_strings()
-    # build merkel root of the transactions
-    self.__merkelRoot = self.__build_merkel_root(listOfTransactionInStringArray)
-    # build string concatenated data, used to compute block hash (except nounce)
+  def __init__(self, jsonData, listOfTransaction = [], previousHash = -1, difficulty = 0):
+    if jsonData:
+      self.__load_from_json(jsonData)
+    else:
+      self.initialize(listOfTransaction, previousHash, difficulty)
     self.__strData = self.__version + str(self.__previousHash) + str(self.__merkelRoot) + str(self.__timeInSeconds)
-    # nounce is the only variable incrementer in hash
-    self.__nounce = 0
   
   @property
   def listOfTransaction(self):
@@ -47,6 +39,38 @@ class Block:
                 difficulty=self.__difficulty,
                 numTransactions=len(self.listOfTransaction),
     )
+
+  # private method
+  def initialize(self, listOfTransaction, previousHash, difficulty):
+    self.__version = '1'
+    self.__listOfTransaction = listOfTransaction
+    self.__previousHash = previousHash
+    self.__hash = -1
+    self.__timeInSeconds = int(time.mktime(datetime.datetime.today().timetuple()))
+    self.__difficulty = difficulty
+    # below fields are to precompute static data for quicker __compute_hash iterations
+    listOfTransactionInStringArray = self.__build_transactions_array_of_strings()
+    # build merkel root of the transactions
+    self.__merkelRoot = self.__build_merkel_root(listOfTransactionInStringArray)
+    # build string concatenated data, used to compute block hash (except nounce)
+    self.__strData = self.__version + str(self.__previousHash) + str(self.__merkelRoot) + str(self.__timeInSeconds)
+    # nounce is the only variable incrementer in hash
+    self.__nounce = 0
+
+
+  # private method
+  def __load_from_json(self, jsonData):
+    self.__version = jsonData.get('version')
+    self.__previousHash = jsonData.get('previousHash')
+    self.__hash = jsonData.get('hash')
+    self.__timeInSeconds = jsonData.get('timeInSeconds')
+    self.__difficulty = jsonData.get('difficulty')
+    self.__merkelRoot = jsonData.get('merkelRoot')
+    self.__nounce = jsonData.get('nounce')
+    self.__listOfTransaction = []
+    for t in jsonData.get('transactions'):
+      tran = Transaction(t.get('fromUser'), t.get('toUser'), t.get('amount'))
+      self.__listOfTransaction.append(tran)
 
 
   # private method
@@ -108,6 +132,11 @@ class Block:
   def is_hash_matching(self):
     difficultyString = self.__generate_diffculty_string()
     return self.hash[0:int(self.__difficulty)] == difficultyString and self.hash == self.__compute_hash()
+
+
+  def is_merkel_matching(self):
+    listOfTransactionInStringArray = self.__build_transactions_array_of_strings()
+    return self.__merkelRoot == self.__build_merkel_root(listOfTransactionInStringArray)
 
 
   def mine(self):

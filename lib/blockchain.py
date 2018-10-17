@@ -8,20 +8,29 @@ from .ledgerentry import LedgerEntry
 
 class BlockChain:
 
-  def __init__(self, name, difficulty, reward):
+  def __init__(self, name, difficulty, reward, filePath):
     self.__name = name
     self.__previousHashForGenesis = -1
     self.__chain = []
     self.__difficulty = difficulty
     self.__minerReward = reward
-    self.__chain.append(self.__create_genesis_block())
+    if filePath:
+      fileData = ''
+      with open(filePath, 'rt') as f:
+        for l in f.readlines():
+          fileData += l
+        jsonArray = json.loads(fileData)
+        for jsonBlock in jsonArray:
+          self.__chain.append(Block(jsonBlock))
+    else:
+      self.__chain.append(self.__create_genesis_block())
 
 
   # private method
   def __create_genesis_block(self):
     # create and return genesis block only if chain is empty
     if len(self.__chain) == 0:
-      genesisblock = Block([], self.__previousHashForGenesis, 0)
+      genesisblock = Block(None, [], self.__previousHashForGenesis, 0)
       genesisblock.mine()
       return genesisblock
     else:
@@ -39,14 +48,14 @@ class BlockChain:
 
   def add_block(self, listOfTransactions, minerName):
     # check for block chain validity
-    compromisedBlock = self.is_valid()
+    isValid, compromisedBlock = self.is_valid()
     if compromisedBlock is not None:
-      raise Exception(self.__name + ' block chain is compromised!', compromisedBlock.summary)
+      raise Exception(self.__name + ' block chain is compromised!', isValid, compromisedBlock.summary)
     # get last block in chain
     lastBlockInChain = self.__get_last_block()
     # create new block with concatenated 1 reward transaction + list of transactions to add in block
     listOfTransactions = LedgerEntry(self.__name, minerName, self.__minerReward).transactions + listOfTransactions
-    newBlock = Block(listOfTransactions, lastBlockInChain.hash, self.__difficulty)
+    newBlock = Block(None, listOfTransactions, lastBlockInChain.hash, self.__difficulty)
     # Proof of Work Phase: mine new block with set diffculty
     newBlock.mine()
     # append newly mined block to the block chain
@@ -57,11 +66,13 @@ class BlockChain:
     previousHash = self.__previousHashForGenesis
     for block in self.__chain:
       if block.is_hash_matching() is False:
-        return block
+        return False, block
+      if block.is_merkel_matching() is False:
+        return False, block
       if block.previousHash != previousHash:
-        return block
+        return False, block
       previousHash = block.hash
-    return None
+    return True, None
 
 
   def list_chain(self):
