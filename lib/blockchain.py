@@ -21,9 +21,9 @@ class BlockChain:
   # private method
   def __create_genesis_block(self):
     # create and return genesis block only if chain is empty
-    if len(self.__chain) is 0:
-      genesisblock = Block([], self.__previousHashForGenesis)
-      genesisblock.mine(0)
+    if len(self.__chain) == 0:
+      genesisblock = Block([], self.__previousHashForGenesis, 0)
+      genesisblock.mine()
       return genesisblock
     else:
       raise Exception('Genesis block can only be created when chain is empty')
@@ -32,7 +32,7 @@ class BlockChain:
   # private method
   def __get_last_block(self):
     # check if chain is empty
-    if len(self.__chain) is 0:
+    if len(self.__chain) == 0:
       raise Exception('Empty chain')
     else:
       return self.__chain[len(self.__chain) - 1]
@@ -46,9 +46,9 @@ class BlockChain:
     # get last block in chain
     lastBlockInChain = self.__get_last_block()
     # create new block with concatenated list of pending transaction + current transactions
-    newBlock = Block(self.__pendingTransaction + listOfTransactions, lastBlockInChain.hash)
+    newBlock = Block(self.__pendingTransaction + listOfTransactions, lastBlockInChain.hash, self.__difficulty)
     # Proof of Work Phase: mine new block with set diffculty
-    newBlock.mine(self.__difficulty)
+    newBlock.mine()
     # append newly mined block to the block chain
     self.__chain.append(newBlock)
     # add miner reward transaction in the pending transaction
@@ -60,7 +60,7 @@ class BlockChain:
     for block in self.__chain:
       if block.is_hash_matching() is False:
         return block
-      if block.previousHash is not previousHash:
+      if block.previousHash != previousHash:
         return block
       previousHash = block.hash
     return None
