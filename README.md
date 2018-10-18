@@ -2,7 +2,7 @@
 
 ## Quickstart
 
-### [main.py demostrates sample usage of BlockChain package](main.py)
+### [main.py](main.py) demostrates sample usage of BlockChain package
 
 Run app
 ```
@@ -31,29 +31,34 @@ configPath = <your_config.yml_path>
 currentDir = <dir_path_to_save_blockchain>
 
 with BlockChain(configPath, currentDir) as bc:
+
   # add transactions to the block chain,
   # arg1: transaction array
   # arg2: miner account
   # Note: every add block call to blockchain
   # adds a ledger entry of the miner reward
   bc.add_block([], 'sumeetsarkar')
+  
   # list the block chain so far in json
   bc.list_chain()
+
   # checks for validity of the block chain
   # returns tuple
   # True, None
   # False, Corrupted Block instance 
+  # Blockchain is first validated before every block addition
   bc.is_valid()
 ```
 
 ### [LedgerEntry](libbc/ledgerentry.py)
 
-Each LedgerEntry is recorded as two transactions using class [Transaction](libbc/transaction.py) for double entry records
+Each [LedgerEntry](libbc/ledgerentry.py) is recorded as two transactions using class [Transaction](libbc/transaction.py) for double entry records
 
 ```python
 from libbc import LedgerEntry
 
 le = LedgerEntry('userA', 'userB', 400)
+
 # transactions is a property of LE, returning the individual Transaction instances array
 le.transactions
 ```
