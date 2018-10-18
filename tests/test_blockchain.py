@@ -6,7 +6,7 @@ import os
 import json
 import unittest
 
-from lib import BlockChain
+from libbc import BlockChain
 
 class TestBlockChainMethods(unittest.TestCase):
 

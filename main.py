@@ -3,8 +3,8 @@ Demonstrates usage of the BlockChain demo library
 """
 
 import os
-from lib import BlockChain
-from lib import LedgerEntry
+from libbc import BlockChain
+from libbc import LedgerEntry
 
 # create block chain instance with difficulty 1 and reward 10 units
 currentDir = os.path.dirname(__file__)
