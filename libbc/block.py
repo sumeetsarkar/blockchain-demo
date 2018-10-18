@@ -53,7 +53,6 @@ class Block:
     # build merkel root of the transactions
     self.__merkelRoot = self.__build_merkel_root(listOfTransactionInStringArray)
     # build string concatenated data, used to compute block hash (except nounce)
-    self.__strData = self.__version + str(self.__previousHash) + str(self.__merkelRoot) + str(self.__timeInSeconds)
     # nounce is the only variable incrementer in hash
     self.__nounce = 0
 

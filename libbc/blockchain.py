@@ -48,6 +48,7 @@ class BlockChain:
     if self.__testMode is False:
       dirname = self.__ymlConfig.get('dump')['dir']
       filename = self.__ymlConfig.get('dump').get('file')
+      self.__dumpFrequency = self.__ymlConfig.get('dump').get('frequency', 'block')
       if filename is None:
         filename = self.__name
       filename += '.json'
@@ -55,6 +56,8 @@ class BlockChain:
       self.__filePath = os.path.join(self.__fileRootDir, dirname, filename)
       self.__load_blockchain_from_file()
     else:
+      self.__dumpFrequency = None
+      self.__filePath = None
       self.__chain.append(self.__create_genesis_block())
 
 
@@ -108,7 +111,8 @@ class BlockChain:
     newBlock.mine()
     # append newly mined block to the block chain
     self.__chain.append(newBlock)
-    # self.dump_blockchain_to_file()
+    if self.__dumpFrequency == 'block':
+      self.dump_blockchain_to_file()
 
 
   def is_valid(self):

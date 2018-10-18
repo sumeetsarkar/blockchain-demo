@@ -1,15 +1,21 @@
 # Block chain config
 
 name: sumeet-blockchain
+
 # block mining difficulty
 difficulty: 4
+
 # miner reward
 reward: 10
+
 # test mode false, does not dump or read blockchain file
 testMode: false
+
 
 # file dump configs
 dump:
   dir: data
   # if filename is null, use blockchain name
   file: null
+  # frequency of dump, after every 'block', or 'end'
+  frequency: block
