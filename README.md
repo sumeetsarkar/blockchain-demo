@@ -52,14 +52,14 @@ with BlockChain(configPath, currentDir) as bc:
 
 ### [LedgerEntry](libbc/ledgerentry.py)
 
-Each [LedgerEntry](libbc/ledgerentry.py) is recorded as two transactions using class [Transaction](libbc/transaction.py) for double entry records
+Each [LedgerEntry](libbc/ledgerentry.py) is recorded as two transactions using class [Transaction](libbc/transaction.py)
 
 ```python
 from libbc import LedgerEntry
 
 le = LedgerEntry('userA', 'userB', 400)
 
-# transactions is a property of LE, returning the individual Transaction instances array
+# transactions is a property of LE, returning the array of transactions in ledger
 le.transactions
 ```
 

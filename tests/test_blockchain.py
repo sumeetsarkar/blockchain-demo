@@ -42,6 +42,14 @@ class TestBlockChainMethods(unittest.TestCase):
       self.assertFalse(result[0])
       self.assertIsNotNone(result[1])
     
+  def test_compute_statement_for_user(self):
+    with BlockChain(self.__configValid, self.__currentDir) as bc:
+      totalCredit, totalDebit = bc.compute_statement_for_user('userA', False)
+      self.assertEqual(totalCredit, 0)
+      self.assertEqual(totalDebit, -3000)
+      totalCredit, totalDebit = bc.compute_statement_for_user('userC', False)
+      self.assertEqual(totalCredit, 400)
+      self.assertEqual(totalDebit, -1000)
 
 if __name__ == '__main__':
     unittest.main()

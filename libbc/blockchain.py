@@ -153,18 +153,23 @@ class BlockChain:
       print(json.dumps(parsedData, indent=2))
 
 
-  def compute_statement_for_user(self, user):
+  def compute_statement_for_user(self, user, logSummary = True):
     totalDebit = 0
     totalCredit = 0
-    print('\nLisiting ' + user + ' transactions...')
+    if logSummary:
+      print('\nLisiting ' + user + ' transactions...')
     for block in self.__chain:
       for tran in block.listOfTransaction:
         if tran.fromUser == user and tran.amount > 0:
           totalDebit -= tran.amount
-          print(tran.summary)
+          if logSummary:
+            print(tran.summary)
         elif tran.toUser == user and tran.amount > 0:
           totalCredit += tran.amount
-          print(tran.summary)
-    print('Credits  : ' + str(totalCredit))
-    print('Debits   : ' + str(totalDebit))
-    print('Balance  : ' + str(totalCredit + totalDebit))
+          if logSummary:
+            print(tran.summary)
+    if logSummary:
+      print('Credits  : ' + str(totalCredit))
+      print('Debits   : ' + str(totalDebit))
+      print('Balance  : ' + str(totalCredit + totalDebit))
+    return totalCredit, totalDebit
