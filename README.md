@@ -1,9 +1,8 @@
 > Sample BlockChain demo lib in python
 
 ## Quickstart
-----------------------------------
 
-[main.py demostrates sample usage of BlockChain package](main.py)
+### [main.py demostrates sample usage of BlockChain package](main.py)
 
 Run app
 ```
@@ -16,8 +15,6 @@ python3 -m unittest tests/test_blockchain.py
 ```
 
 ## Package usage
-----------------------------------
-
 ### [BlockChain](libbc/blockchain.py)
 
 The class BlockChain is used as a context manager
@@ -30,8 +27,8 @@ Upon instantiation it,
 ```python
 from libbc import BlockChain
 
-configPath = <your--config.yml--path>
-currentDir = <dir--path--to--save--blockchain>
+configPath = <your_config.yml_path>
+currentDir = <dir_path_to_save_blockchain>
 
 with BlockChain(configPath, currentDir) as bc:
   # add transactions to the block chain,
@@ -62,7 +59,6 @@ le.transactions
 ```
 
 ## [BlockChain Config](config.yml)
-----------------------------------
 ```yaml
 # Block chain config
 
@@ -90,7 +86,6 @@ dump:
 ```
 
 ## Block Definition from BlockChain
-----------------------------------
 
 Following information is captured in every block
 - Block version
@@ -105,7 +100,6 @@ Following information is captured in every block
 
 
 ## Hash Algorithm
-----------------------------------
 
 ### SHA256(SHA256(Block_Header))
 
@@ -113,7 +107,7 @@ Block_Header = (version + previousHash + merkelRoot + timeInSeconds + Nounce)
 
 
 ## Sample Block
-----------------------------------
+
 ```json
 {
     "version": "1",
