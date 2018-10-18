@@ -1,0 +1,15 @@
+# Block chain config
+
+name: invalid_blockchain_corrupt_hash
+# block mining difficulty
+difficulty: 4
+# miner reward
+reward: 10
+# test mode false, does not dump or read blockchain file
+testMode: false
+
+# file dump configs
+dump:
+  dir: data/invalid
+  # if filename is null, use blockchain name
+  file: null

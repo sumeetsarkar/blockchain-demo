@@ -7,9 +7,10 @@ from lib import BlockChain
 from lib import LedgerEntry
 
 # create block chain instance with difficulty 1 and reward 10 units
-configPath = os.path.join(os.path.dirname(__file__), 'config.yml')
+currentDir = os.path.dirname(__file__)
+configPath = os.path.join(currentDir, 'config.yml')
 
-with BlockChain(configPath) as blockChain:
+with BlockChain(configPath, currentDir) as blockChain:
   # create list of transactions from ledger entry
   listOfTransactions = []
   listOfTransactions += LedgerEntry('userA', 'userB', 400).transactions

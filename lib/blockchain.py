@@ -3,6 +3,7 @@ BlockChain
 """
 
 import os
+import sys
 import json
 import yaml
 from .block import Block
@@ -10,10 +11,11 @@ from .ledgerentry import LedgerEntry
 
 class BlockChain:
 
-  def __init__(self, configPath):
+  def __init__(self, configPath, fileRootDir = ''):
     if configPath is None:
       raise Exception('Config file Path missing')
     self.__configPath = configPath
+    self.__fileRootDir = fileRootDir
 
 
   def __enter__(self):
@@ -50,7 +52,7 @@ class BlockChain:
         filename = self.__name
       filename += '.json'
       # form file dump path
-      self.__filePath = os.path.join(os.path.dirname(__file__), '../', dirname, filename)
+      self.__filePath = os.path.join(self.__fileRootDir, dirname, filename)
       self.__load_blockchain_from_file()
     else:
       self.__chain.append(self.__create_genesis_block())

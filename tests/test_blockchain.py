@@ -12,34 +12,35 @@ class TestBlockChainMethods(unittest.TestCase):
 
   def setUp(self):
     # prepare file paths
-    self.__filePathValid = os.path.join(os.path.dirname(__file__), 'data/valid', 'valid_blockchain.json')
-    self.__filePathInvalidCorruptHash = os.path.join(os.path.dirname(__file__), 'data/invalid', 'invalid_blockchain_corrupt_hash.json')
-    self.__filePathInvalidCorruptPreviousHash = os.path.join(os.path.dirname(__file__), 'data/invalid', 'invalid_blockchain_corrupt_previous_hash.json')
-    self.__filePathInvalidCorruptTransaction = os.path.join(os.path.dirname(__file__), 'data/invalid', 'invalid_blockchain_corrupt_transactions.json')
+    self.__currentDir = os.path.dirname(__file__)
+    self.__configValid = os.path.join(self.__currentDir, 'config/valid', 'config.yml')
+    self.__configInvalidCorruptHash = os.path.join(self.__currentDir, 'config/invalid', 'config_corrupt_hash.yml')
+    self.__configInvalidCorruptPreviousHash = os.path.join(self.__currentDir, 'config/invalid', 'config_corrupt_previous_hash.yml')
+    self.__configInvalidCorruptTransaction = os.path.join(self.__currentDir, 'config/invalid', 'config_corrupt_transactions.yml')
   
   def test_valid(self):
-    blockChainValid = BlockChain('test_valid', 6, 10, self.__filePathValid)
-    result = blockChainValid.is_valid()
-    self.assertTrue(result[0])
-    self.assertIsNone(result[1])
+    with BlockChain(self.__configValid, self.__currentDir) as bc:
+      result = bc.is_valid()
+      self.assertTrue(result[0])
+      self.assertIsNone(result[1])
     
   def test_invalid_hash(self):
-    blockChainInvalidCorruptHash = BlockChain('test_invalid', 6, 10, self.__filePathInvalidCorruptHash)
-    result = blockChainInvalidCorruptHash.is_valid()
-    self.assertFalse(result[0])
-    self.assertIsNotNone(result[1])
+    with BlockChain(self.__configInvalidCorruptHash, self.__currentDir) as bc:
+      result = bc.is_valid()
+      self.assertFalse(result[0])
+      self.assertIsNotNone(result[1])
 
   def test_invalid_previous_hash(self):
-    blockChainInvalidCorruptPreviousHash = BlockChain('test_invalid', 6, 10, self.__filePathInvalidCorruptPreviousHash)
-    result = blockChainInvalidCorruptPreviousHash.is_valid()
-    self.assertFalse(result[0])
-    self.assertIsNotNone(result[1])
+    with BlockChain(self.__configInvalidCorruptPreviousHash, self.__currentDir) as bc:
+      result = bc.is_valid()
+      self.assertFalse(result[0])
+      self.assertIsNotNone(result[1])
 
   def test_invalid_corrupt_transaction(self):
-    blockChainInvalidCorruptTransaction = BlockChain('test_invalid', 6, 10, self.__filePathInvalidCorruptTransaction)
-    result = blockChainInvalidCorruptTransaction.is_valid()
-    self.assertFalse(result[0])
-    self.assertIsNotNone(result[1])
+    with BlockChain(self.__configInvalidCorruptTransaction, self.__currentDir) as bc:
+      result = bc.is_valid()
+      self.assertFalse(result[0])
+      self.assertIsNotNone(result[1])
     
 
 if __name__ == '__main__':
