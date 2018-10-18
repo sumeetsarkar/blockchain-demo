@@ -48,6 +48,10 @@ with BlockChain(configPath, currentDir) as bc:
   # False, Corrupted Block instance 
   # Blockchain is first validated before every block addition
   bc.is_valid()
+
+  # prints account summary of transactions for given user
+  # returns tuple, (totalCredit, totalDebit)
+  bc.compute_statement_for_user('userA')
 ```
 
 ### [LedgerEntry](libbc/ledgerentry.py)
