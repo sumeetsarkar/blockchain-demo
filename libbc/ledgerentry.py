@@ -5,22 +5,23 @@ LedgerEntry:
 
 from .transaction import Transaction
 
+
 class LedgerEntry:
-  def __init__(self, fromUser, toUser, amount):
-    self.__creditTransaction = Transaction(fromUser, toUser, amount)
-    self.__debitTransaction = Transaction(toUser, fromUser, amount * -1)
+    def __init__(self, fromUser, toUser, amount):
+        self.__creditTransaction = Transaction(fromUser, toUser, amount)
+        self.__debitTransaction = Transaction(toUser, fromUser, amount * -1)
 
-  @property
-  def creditTransaction(self):
-    return self.__creditTransaction
+    @property
+    def creditTransaction(self):
+        return self.__creditTransaction
 
-  @property
-  def debitTransaction(self):
-    return self.__debitTransaction
+    @property
+    def debitTransaction(self):
+        return self.__debitTransaction
 
-  @property
-  def transactions(self):
-    return [
-      self.creditTransaction,
-      self.debitTransaction,
-    ]
+    @property
+    def transactions(self):
+        return [
+            self.creditTransaction,
+            self.debitTransaction,
+        ]
